@@ -1,17 +1,15 @@
-/* --- color tokens --- */
+/* === Color Tokens*/
 :root {
-    --bg:        #242530;
-    --display:   #3a3f77;
-    --btn-dark:  #404258;
-    --btn-op:    #f49d1a;
-    --btn-eq:    #b2b2b2;
-    --white:     #ffffff;
-    --radius:    18px;
+  --bg:        #242530;  /* Background color */
+  --display:   #3a3f77;  /* Display screen background */
+  --btn-dark:  #404258;  /* Dark button background (digits, actions) */
+  --btn-op:    #f49d1a;  /* Operator buttons (+, -, etc.) */
+  --btn-eq:    #b2b2b2;  /* Equals button */
+  --white:     #ffffff;  /* Pure white text */
+  --radius:    18px;     /* Standard border radius for buttons/display */
   }
   
-  *,
-  *::before,
-  *::after {
+  *, *::before,*::after {
     box-sizing: border-box;
     font-family: system-ui, sans-serif;
   }
@@ -23,7 +21,7 @@
     place-content: center;
     background: var(--bg);
   }
-  
+  /* === Calculator Container Layout === */
   .calculator {
     width: 100%;
     max-width: 380px;
@@ -40,7 +38,7 @@
     gap: 14px;
     padding: 20px;
   }
-  
+  /* === Display Screen === */
   .display {
     grid-area: disp;
     width: 100%;
@@ -54,7 +52,8 @@
     padding: 0 20px;
   }
   
-  .pad,
+  /* === Button Grids === */
+.pad,
   .ops {
     display: grid;
     gap: 12px;
@@ -70,7 +69,8 @@
     grid-template-columns: repeat(2, 1fr);
   }
   
-  .btn {
+  /* === Shared Button Styles === */
+.btn {
     border: none;
     border-radius: var(--radius);
     font-size: 1.4rem;

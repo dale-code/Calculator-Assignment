@@ -1,73 +1,81 @@
-const display = document.getElementById("display");
-console.log(display);
+const screen = document.getElementById("display");
+// Handling clicks from all buttons
+document.addEventListener("click", function (evt) {
+  const clicked = evt.target;
 
-document.addEventListener("click", (e) => {
-  const el = e.target;
-  if (!el.classList.contains("btn")) return;
+  // Check if it wasn't a calculator button
+  if (!clicked.classList.contains("btn")) return;
 
-  const value = el.dataset.value;
+  const val = clicked.dataset.value;
 
-  if (el.classList.contains("digit")) {
-    display.value += value;
-    console.log("Digit clicked:", value);
+  if (clicked.classList.contains("digit")) {
+    screen.value += val;
+    console.log(`Tapped digit: ${val}`);
   }
 
-  if (el.classList.contains("op")) {
-    display.value += ` ${value} `;
-    console.log("Operator clicked:", value);
+  if (clicked.classList.contains("op")) {
+    screen.value += ` ${val} `;
+    console.log(`Operator chosen: ${val}`);
   }
 
-  if (el.id === "backspace") {
-    display.value = display.value.trimEnd().slice(0, -1);
-    console.log("Backspace clicked");
+  // For backspace
+  if (clicked.id === "backspace") {
+    screen.value = screen.value.trimEnd().slice(0, -1);
+    console.log("Backspace hit");
   }
 
-  if (el.id === "clear") {
-    display.value = "";
-    console.log("Clear clicked");
+  if (clicked.id === "clear") {
+    screen.value = "";
+    console.log("Clear all");
   }
 
-  if (el.id === "equals") {
-    evaluate();
-    console.log("Equals clicked");
-  }
-});
-
-document.addEventListener("keydown", (e) => {
-  if ("0123456789.".includes(e.key)) {
-    display.value += e.key;
-  } else if ("+-*/".includes(e.key)) {
-    e.preventDefault();
-    display.value += ` ${e.key} `;
-  } else if (e.key === "Enter") {
-    e.preventDefault();
-    evaluate();
-  } else if (e.key === "Backspace") {
-    display.value = display.value.trimEnd().slice(0, -1);
-  } else if (e.key === "Escape") {
-    display.value = "";
+  if (clicked.id === "equals") {
+    tryEval();
+    console.log("Equal clicked");
   }
 });
 
-function evaluate() {
+// Keyboard input
+document.addEventListener("keydown", function (e) {
+  const key = e.key;
+
+  if ("0123456789.".includes(key)) {
+    screen.value += key;
+  } else if ("+-*/".includes(key)) {
+    e.preventDefault();
+    screen.value += ` ${key} `;
+  } else if (key === "Enter") {
+    e.preventDefault();
+    tryEval();
+  } else if (key === "Backspace") {
+    screen.value = screen.value.trimEnd().slice(0, -1);
+  } else if (key === "Escape") {
+    screen.value = "";
+  }
+});
+
+// Main evaluation logic
+function tryEval() {
+  let expression = screen.value;
+
+  //replacement pass for symbols
+  expression = expression
+    .replace(/×/g, "*")
+    .replace(/÷/g, "/")
+    .replace(/−/g, "-")
+    .replace(/%/g, "%")
+    .replace(/\^/g, "**"); 
+
+  if (expression.trim() === "") return;
+
+
   try {
-    const expr = display.value
-      .replace(/×/g, "*")
-      .replace(/÷/g, "/")
-      .replace(/−/g, "-")
-      .replace(/%/g, "%")
-      .replace(/\^/g, "**");
-
-    if (expr.trim() === "") return;
-
-    const result = Function(`return ${expr}`)();
-    display.value = result;
-    console.log("Result:", result);
-  } catch (err) {
-    display.value = "Error";
-    setTimeout(() => (display.value = ""), 1500);
-    console.error("Evaluation error:", err);
+    const outcome = Function(`return ${expression}`)();
+    screen.value = outcome;
+    console.log("Eval result:", outcome);
+  } catch (error) {
+    screen.value = "Error";
+    setTimeout(() => (screen.value = ""), 1500); // reset after showing error
+    console.error("Failed to evaluate:", error);
   }
 }
-// scripts.js
-// This script handles the calculator's functionality, including button clicks and keyboard input.
